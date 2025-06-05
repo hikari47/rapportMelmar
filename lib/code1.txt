@@ -1,0 +1,165 @@
+import 'package:appmelmar/screens/accueil.dart';
+import 'package:appmelmar/screens/first.dart';
+import 'package:appmelmar/screens/inscription.dart';
+import 'package:appmelmar/screens/login.dart';
+import 'package:appmelmar/screens/presence.dart';
+import 'package:appmelmar/screens/espace_prive.dart';
+import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+
+void main()async{
+  try
+  {
+    WidgetsFlutterBinding.ensureInitialized();
+    await Firebase.initializeApp();
+    runApp(MyApp());
+  }catch(e)
+  {
+    print(e.toString());
+  }
+
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Application Flutter',
+      initialRoute: '/',
+      debugShowCheckedModeBanner: false,
+      routes: {
+        //'/':(context)=>AccueilPage(),
+        '/':(context)=>FirstPage(),
+        '/inscription': (context) => InscriptionClientPage(),
+        '/login': (context) => LoginPage(),
+          '/presence':(context) => PresencePage(),
+        '/espace_personnel':(context) =>EspacePersonnel(),
+      }
+    );
+  }
+}
+
+
+
+
+import 'package:appmelmar/services/firebase_database_all.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+
+
+
+class LoginPage extends StatelessWidget {
+  final TextEditingController usernameController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+ final AuthService _auth= AuthService();
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+                begin: Alignment.topCenter,
+                colors:[
+                  Color.fromRGBO(156, 39, 176, 1),
+                  Color.fromRGBO(153, 57, 173, 1),
+                  Color.fromRGBO(174, 94, 193, 1),
+                ])
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Padding(
+                padding: EdgeInsets.only(top: 40),
+               child:Container(
+                 margin: EdgeInsets.only(left: 50,bottom: 0),
+                 child: Text('Login',style: TextStyle(fontSize: 30,color: Colors.white,),),)
+             ,),
+            Expanded(child:Padding(
+              padding: EdgeInsets.only(top: 20),
+              child: Container(
+                decoration: BoxDecoration(color: Colors.white,borderRadius: BorderRadius.only(topLeft: Radius.circular(50.0),topRight: Radius.circular(50.0))),
+
+                child: SingleChildScrollView(
+                  scrollDirection:Axis.vertical,
+                  child: Column(
+                      children: [
+                        SizedBox(height: 40,),
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 30),
+                          child:  TextFormField(
+                            keyboardType: TextInputType.emailAddress,
+                            decoration: InputDecoration(labelText:'login',hintText: "entrer votre login"),
+                            controller: usernameController,
+                          ),
+                        ),
+                        Container(child: Text('email non valide ',style: TextStyle(color: Colors.red),),padding: EdgeInsets.only(top: 10),),
+                        SizedBox(height: 40,),
+                        Container(
+                          padding: EdgeInsets.symmetric(horizontal: 30),
+                          child: Row(children: [
+                            Expanded(
+                              child:TextFormField(
+                              keyboardType: TextInputType.emailAddress,
+                              decoration: InputDecoration(labelText:'Password',hintText: "entrer votre mot de passe",),
+                              controller: passwordController,
+                              obscureText: true,
+                            ),
+                            flex: 6,),
+                            Expanded(child:  Icon(CupertinoIcons.eye_fill),flex: 1, ),
+                          ],) ,
+                        ),
+                        Container(child: Text('mot de passe ne correpond pas ',style: TextStyle(color: Colors.red),),padding: EdgeInsets.only(top: 10),),
+                        SizedBox(height: 60,),
+                        Container(
+                          width: MediaQuery.of(context).size.width-50,
+                          child:  OutlinedButton(
+                              style: OutlinedButton.styleFrom(backgroundColor: Colors.purple),
+                              onPressed: (){
+                                _auth.signInAnon();
+                                //Navigator.pushNamed(context, '/espace_personnel');
+                                },
+                              child: Text('LOGIN IN',style: TextStyle(color:Colors.black ),)),
+                        ),
+                        Container(child: Text('mot de passe oublier ',style: TextStyle(color: Colors.red),),padding: EdgeInsets.only(top: 10),),
+
+                      ]
+                  ),
+
+                ),
+              ),))
+
+
+          ],
+        )
+      ),
+    );
+  }
+}
+Container(
+       child: userProvider.user == null
+           ? const Text('No user logged in')
+           : Column(
+         children: [
+           StreamBuilder(
+               stream: AuthService().userChange,
+               builder: (context, snapshot)
+           {
+             return snapshot.data!=null ?Text('userFb : ${userProvider.user?.userFb}'): Text("login ${userProvider.user}");
+           }
+           )
+         ],
+       ),
+     ),
+
+     decoration: BoxDecoration(
+                   gradient: LinearGradient(
+                       begin: Alignment.topCenter,
+                       colors:[
+                         Color.fromRGBO(156, 39, 176, 1),
+                         Color.fromRGBO(153, 57, 173, 1),
+                         Color.fromRGBO(174, 94, 193, 1),
+                       ])
+                 ),

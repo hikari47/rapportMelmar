@@ -1,0 +1,1 @@
+je veux que tu m'explique etape par etape en disant qu'est ce qu'il faut telecharger ou et comment pour faire cette exercice comment entrainer opencv en python a reconnaitre des anomalies comme des boutons, des taches noirs, des brulures des cernes sur des photos d'images;je veux que tu  comment avec comment installer python ,creer un projet

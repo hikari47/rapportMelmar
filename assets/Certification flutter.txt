@@ -1,0 +1,53 @@
+Oui, il existe plusieurs certifications Flutter, bien que Google ne propose pas encore de certification officielle Flutter (comme c'est le cas pour certaines technologies comme Android ou Google Cloud). Toutefois, plusieurs plateformes et organismes proposent des certifications reconnues par l'industrie. Voici un aperçu :
+
+🔹 1. Udemy – Flutter Development Bootcamps (avec certificat)
+Contenu : Formation complète de A à Z (Widgets, Firebase, API REST, etc.)
+
+Certificat : Délivré à la fin du cours.
+
+Lien : https://www.udemy.com
+
+🔹 2. Coursera – Build Native Mobile Apps with Flutter (by Google)
+Organisme : Google via l’Université du Michigan
+
+Certificat : Oui, délivré par Coursera
+
+Idéal pour : Apprentissage académique avec validation
+
+Lien : https://www.coursera.org/learn/app-development-with-flutter
+
+🔹 3. App Brewery – Flutter & Dart - The Complete Guide
+Très populaire et recommandé pour les débutants.
+
+Certificat : Oui, délivré par App Brewery et Udemy.
+
+Lien : https://www.appbrewery.co/p/flutter-development-bootcamp-with-dart
+
+🔹 4. Pluralsight – Flutter Path
+Certificat : Oui (dans le cadre d'une formation continue ou professionnelle)
+
+Contenu : Plus technique, bon pour intermédiaires/avancés
+
+Lien : https://www.pluralsight.com/paths/flutter
+
+🔹 5. LinkedIn Learning – Flutter Development
+Certificat : Oui, directement affichable sur ton profil LinkedIn
+
+Public : Débutants à intermédiaires
+
+Lien : https://www.linkedin.com/learning/
+
+🔹 6. CertiProf – Flutter Essentials Certification (FECP)
+Certification internationale (payante)
+
+Examen en ligne (50 questions, 60 min)
+
+Lien : https://certiprof.com
+
+En résumé :
+Plateforme	Certificat	Niveau	Recommandé pour
+Udemy	✅	Débutant à Avancé	Formation pratique
+Coursera	✅	Débutant	Certificat académique
+App Brewery	✅	Débutant à Moyen	Très pédagogique
+LinkedIn Learning	✅	Tous niveaux	Valorisation LinkedIn
+CertiProf	✅	Moyen à avancé	Reconnaissance professionnelle

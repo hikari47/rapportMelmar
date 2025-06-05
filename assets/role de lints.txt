@@ -1,0 +1,67 @@
+Dans Flutter (et plus généralement dans les projets Dart), les lints sont des règles statiques qui permettent de vérifier la qualité du code. Elles servent à :
+
+✅ 1. Maintenir un code propre et cohérent
+Les lints imposent des conventions de style, comme :
+
+utiliser des noms de variables explicites,
+
+éviter les imports inutiles,
+
+respecter l'indentation, etc.
+
+Ex. : Éviter d’avoir du code comme var x = 1; au lieu de var count = 1;.
+
+🐞 2. Détecter les erreurs potentielles à l'avance
+Elles signalent des pratiques dangereuses ou inutiles :
+
+variables non utilisées,
+
+conditions toujours vraies,
+
+code mort,
+
+affectations inutiles...
+
+📦 3. Assurer la maintenabilité dans les équipes
+Avec des lints bien définis, tous les développeurs suivent les mêmes règles, ce qui rend le code plus lisible et plus facile à maintenir, surtout dans un travail collaboratif.
+
+🧰 4. Faciliter l'intégration continue (CI/CD)
+Des outils comme flutter analyze utilisent les règles de lint pour vérifier automatiquement la qualité du code lors des tests ou des déploiements.
+
+📁 Fichier analysis_options.yaml
+C’est dans ce fichier que tu définis les règles de lint pour ton projet :
+
+yaml
+Copier
+Modifier
+include: package:flutter_lints/flutter.yaml
+
+linter:
+  rules:
+    avoid_print: true
+    prefer_const_constructors: true
+📦 flutter_lints ou pedantic ?
+flutter_lints : recommandé pour les projets Flutter récents.
+
+pedantic : ancienne configuration utilisée par Google pour Dart, maintenant dépassée.
+
+🛠️ Comment l’utiliser dans un projet ?
+Ajoute dans ton pubspec.yaml :
+
+yaml
+Copier
+Modifier
+dev_dependencies:
+  flutter_lints: ^3.0.1
+Crée ou modifie le fichier analysis_options.yaml :
+
+yaml
+Copier
+Modifier
+include: package:flutter_lints/flutter.yaml
+Lance l’analyse :
+
+bash
+Copier
+Modifier
+flutter analyze
