@@ -1,3 +1,4 @@
+import 'package:appmelmar/my_widgets/top_bar.dart';
 import 'package:appmelmar/screens/my_constants_k_widgets/khead.dart';
 import 'package:flutter/material.dart';
 
@@ -80,7 +81,8 @@ class AccueilPage extends StatelessWidget {
                     ),
                   ),
                 );
-              })
+              }),
+              //TopBar(titre: null, isUserConnected: true),
         ],
       )
     );

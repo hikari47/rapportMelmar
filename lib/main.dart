@@ -1,3 +1,5 @@
+import 'package:appmelmar/providers/client_model_provider.dart';
+import 'package:appmelmar/providers/user_model_provider.dart';
 import 'package:appmelmar/screens/accueil.dart';
 import 'package:appmelmar/screens/beauty.dart';
 import 'package:appmelmar/screens/details_home.dart';
@@ -11,6 +13,7 @@ import 'package:appmelmar/screens/intro.dart';
 import 'package:appmelmar/screens/login.dart';
 import 'package:appmelmar/screens/presence.dart';
 import 'package:appmelmar/screens/espace_prive.dart';
+import 'package:appmelmar/screens/test_marquer_presence.dart';
 import 'package:appmelmar/services/provider_class.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -25,17 +28,19 @@ void main() async {
   print('initialisation reussi');
   await initializeDateFormatting('fr_FR', null);
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => UserProvider(),
-      child: const MyApp(), // Ajout de const ici
-    ),
+    MultiProvider(providers: [
+    ChangeNotifierProvider(create: (_) => UserProvider()),
+    ChangeNotifierProvider(create: (_) => ClientProvider()),
+    ],
+    child: const MyApp(),)
   );
 }
 
 Map<String, WidgetBuilder> getAppRoutes() {
   return {
     //'/': (context) => AccueilPage(),
-    '/': (context) =>  Intro(),
+    //'/': (context) =>  Intro(),
+    '/':(context)=>WifiCheckerScreen(),
     '/inscriptionClient': (context) =>  InscriptionClientPage(),
     '/inscriptionEmploye': (context) =>  InscriptionEmployePage(),
     '/login': (context) =>  LoginPage(),
@@ -47,7 +52,8 @@ Map<String, WidgetBuilder> getAppRoutes() {
     '/details_immo': (context) =>  DetailsImmo(),
     '/beauty': (context) =>  BeautyPage(),
     '/events_beauty': (context) =>  EventsBeautyPage(),
-    '/sport': (context) => FitnessPage()
+    '/sport': (context) => FitnessPage(),
+
   };
 }
 
