@@ -1,27 +1,25 @@
 class PresenceModel {
   final int idPresence;
+  final int idEmpl;
   final bool presence;
   final String motif;
-
+  final DateTime dateCreation;
   PresenceModel({
     required this.idPresence,
+    required this.idEmpl,
     required this.presence,
     required this.motif,
+    required this.dateCreation,
   });
 
-  factory PresenceModel.fromFirebase(Map<String, dynamic> data) {
+  factory PresenceModel.fromMap(Map<String, dynamic> data) {
     return PresenceModel(
       idPresence: data['idPresence'],
+      idEmpl:data['id_employe'] ,
       presence: data['presence'],
       motif: data['motif'],
+      dateCreation: data['date_creation']
     );
   }
 
-  factory PresenceModel.fromSqflite(Map<String, dynamic> data) {
-    return PresenceModel(
-      idPresence: data['idPresence'],
-      presence: data['presence'] == 1 || data['presence'] == true,
-      motif: data['motif'],
-    );
-  }
 }

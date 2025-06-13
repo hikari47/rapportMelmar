@@ -58,7 +58,7 @@ class _ProductServiceFormReservationState extends State<ProductServiceFormReserv
             TableCalendar(
               locale: 'fr_FR',
               firstDay: DateTime(_focusedDay.year, _focusedDay.month, 1),
-              lastDay: DateTime(_focusedDay.year, _focusedDay.month + 1, 0),
+              lastDay: DateTime(_focusedDay.year,9, 0),
               focusedDay: _focusedDay,
               selectedDayPredicate: (day) =>
                   _selectedDate != null &&

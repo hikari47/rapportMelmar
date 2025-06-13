@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 class TopBar extends StatefulWidget {
@@ -27,18 +29,29 @@ class TopBar extends StatefulWidget {
 class _TopBarState extends State<TopBar> {
   final TextEditingController _controller = TextEditingController();
   List<String> _filtered = [];
+  bool isFound = false;
 
   @override
   void initState() {
     super.initState();
-    _filtered = widget.searchList;
+    //_filtered = widget.searchList;
   }
 
   void _onSearchChanged(String value) {
     setState(() {
-      _filtered = widget.searchList
-          .where((item) => item.toLowerCase().contains(value.toLowerCase()))
-          .toList();
+      if (value.length < 3) {
+        _filtered = [];
+        isFound = false; // Réinitialiser si moins de 3 caractères
+      } else {
+        _filtered = widget.searchList
+            .where((item) => item.toLowerCase().contains(value.toLowerCase()))
+            .toList();
+            // Vérifie si un résultat exact est trouvé
+        isFound = _filtered.any((item) => item.toLowerCase() == value.toLowerCase());
+        if (isFound) {
+          _filtered = []; // Masque la liste si un résultat exact est trouvé
+        }
+      }
     });
     if (widget.onSearch != null) {
       widget.onSearch!(_filtered);
@@ -47,18 +60,60 @@ class _TopBarState extends State<TopBar> {
 
   @override
   Widget build(BuildContext context) {
-    Widget content;
-    if (!widget.isUserConnected) {
-      // Non connecté : seulement la barre de recherche
-      content = Padding(
-        padding: const EdgeInsets.all(12),
-        child: _SearchBar(
+    Widget searchSection = Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        _SearchBar(
           controller: _controller,
           onChanged: _onSearchChanged,
         ),
+        if (_filtered.isNotEmpty && !isFound)
+          Container(
+            constraints: const BoxConstraints(maxHeight: 200),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(8),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black12,
+                  blurRadius: 4,
+                  offset: Offset(0, 2),
+                ),
+              ],
+            ),
+            margin: const EdgeInsets.only(top: 4),
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: _filtered.length,
+              itemBuilder: (context, index) {
+                final item = _filtered[index];
+                return ListTile(
+                  title: Text(item),
+                  onTap: () {
+                    _controller.text = item;
+                    setState(() {
+                      _filtered = []; // Masquer la liste après sélection
+                      isFound=false;
+                    });
+                    _onSearchChanged(item);
+                    FocusScope.of(context).unfocus();
+                  },
+                );
+              },
+            ),
+          ),
+      ],
+    );
+
+    Widget content;
+    if (!widget.isUserConnected) {
+      // Non connecté : seulement la barre de recherche + résultats
+      content = Padding(
+        padding: const EdgeInsets.all(12),
+        child: searchSection,
       );
     } else {
-      // Connecté : titre, avatar, cloche, barre de recherche
+      // Connecté : titre, avatar, cloche, barre de recherche + résultats
       content = Padding(
         padding: const EdgeInsets.all(12),
         child: Column(
@@ -67,7 +122,9 @@ class _TopBarState extends State<TopBar> {
             Row(
               children: [
                 Expanded(
-                  child: Text(
+                  child: Padding(
+                  padding:const EdgeInsets.only(left: 50),
+                  child:Text(
                     widget.userName ?? '',
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
@@ -75,12 +132,12 @@ class _TopBarState extends State<TopBar> {
                     ),
                     overflow: TextOverflow.ellipsis,
                   ),
-                ),
+                      )  ),
                 if (widget.userImageUrl != null)
                   CircleAvatar(
                     backgroundImage: widget.userImageUrl!.startsWith('http')
                         ? NetworkImage(widget.userImageUrl!)
-                        : AssetImage(widget.userImageUrl!) as ImageProvider,
+                        : FileImage(File(widget.userImageUrl!),scale: 20.0) as ImageProvider,
                     radius: 22,
                   ),
                 const SizedBox(width: 12),
@@ -91,10 +148,7 @@ class _TopBarState extends State<TopBar> {
               ],
             ),
             const SizedBox(height: 10),
-            _SearchBar(
-              controller: _controller,
-              onChanged: _onSearchChanged,
-            ),
+            searchSection,
           ],
         ),
       );

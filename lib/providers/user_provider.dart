@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import '../models/user.dart';
 
-class UserProvider with ChangeNotifier {
+class UserProvider extends ChangeNotifier {
   List<UserModel> _users = [];
   UserModel? _user;
 

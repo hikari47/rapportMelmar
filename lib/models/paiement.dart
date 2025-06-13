@@ -1,26 +1,24 @@
 class PaiementModel {
   final int idPaiement;
-  final DateTime datePaiement;
+    final int idCli;
+  final int? idEmpl;
+  final DateTime dateCreation;
   final double montant;
 
   PaiementModel({
     required this.idPaiement,
-    required this.datePaiement,
+    required this.idCli,
+    required this.idEmpl,
+    required this.dateCreation,
     required this.montant,
   });
 
-  factory PaiementModel.fromFirebase(Map<String, dynamic> data) {
+  factory PaiementModel.fromMap(Map<String, dynamic> data) {
     return PaiementModel(
-      idPaiement: data['idPaiement'],
-      datePaiement: DateTime.parse(data['datePaiement']),
-      montant: (data['montant'] as num).toDouble(),
-    );
-  }
-
-  factory PaiementModel.fromSqflite(Map<String, dynamic> data) {
-    return PaiementModel(
-      idPaiement: data['idPaiement'],
-      datePaiement: DateTime.parse(data['datePaiement']),
+      idPaiement: data['id_paiement'],
+      idCli: data['id_client'],
+      idEmpl: data['id_employe'],
+     dateCreation: DateTime.parse(data['date_creation']),
       montant: (data['montant'] as num).toDouble(),
     );
   }

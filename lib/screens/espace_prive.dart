@@ -1,3 +1,4 @@
+import 'package:appmelmar/providers/user_provider.dart';
 import 'package:appmelmar/screens/my_constants_k_widgets/khead.dart';
 import 'package:appmelmar/screens/my_constants_k_widgets/kidget_param.dart';
 import 'package:appmelmar/services/firebase_authentication.dart';
@@ -14,7 +15,7 @@ class EspacePersonnel extends StatelessWidget{
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context);
 
-    if (userProvider.user?.userFb==null)
+    if (userProvider.user!=null)
       {
         return Scaffold(
           body:Center(child:Text("vous n'etes pas connecté !"),)
@@ -28,7 +29,7 @@ class EspacePersonnel extends StatelessWidget{
               stream: AuthService().userChange,
               builder: (context, snapshot)
               {
-                return snapshot.data!=null ?Text('${userProvider.user?.login}'): Text("userFb :null");
+                return snapshot.data!=null ?Text('${userProvider.user?.nom}'): Text("userFb :null");
               }
           ),
           actions: [CircleAvatar(

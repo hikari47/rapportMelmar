@@ -71,7 +71,7 @@ class _ProductServiceAchatFormState extends State<ProductServiceAchatForm> {
                 Text('$_total FCFA', style: const TextStyle(fontWeight: FontWeight.bold)),
               ],
             ),
-            const SizedBox(height: 16),
+           
             // Modes de paiement
             Row(
               children: [

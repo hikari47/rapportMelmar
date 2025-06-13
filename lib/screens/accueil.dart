@@ -1,6 +1,9 @@
+import 'package:appmelmar/models/user.dart';
 import 'package:appmelmar/my_widgets/top_bar.dart';
+import 'package:appmelmar/providers/user_provider.dart';
 import 'package:appmelmar/screens/my_constants_k_widgets/khead.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 
 class AccueilPage extends StatelessWidget {
@@ -13,6 +16,7 @@ class AccueilPage extends StatelessWidget {
   ];
   @override
   Widget build(BuildContext context) {
+    UserModel? user=Provider.of<UserProvider>(context).user;
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -39,6 +43,7 @@ class AccueilPage extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          user!=null?Text('Welcome back... '):Text('Enjoy your first experience with us...'),
           KidgetControl(),
           Container(
             padding: EdgeInsets.only(top: 10,left: 10),
