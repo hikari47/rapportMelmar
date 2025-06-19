@@ -30,9 +30,23 @@ class AbonnementModel {
       type: data['type'],
       montantU: (data['montantU'] as num).toDouble(),
       montantT: (data['montantT'] as num).toDouble(),
-      nombreMois: data['nombreMois'],
+      nombreMois: data['nombre_mois'],
       dateCreation: DateTime.parse(data['date_creation']),
     );
+  }
+
+   Map<String, dynamic> toMap() {
+    return {
+        'id_abonnement':this.idAbonnement,
+        'id_client':this.idCli,
+        'id_employe':this.idEmpl,
+        'id_secteur':this.idSecteur,
+        'type':this.type,
+        'montantU':this.montantU,
+        'montantT':this.montantT,
+        'nombre_mois':this.nombreMois,
+        'date_creation':this.dateCreation
+    };
   }
 
 }

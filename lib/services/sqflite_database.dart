@@ -13,8 +13,10 @@ import'package:appmelmar/models/salaire_statut.dart';
 import 'package:appmelmar/providers/abonnement_provider.dart';
 import 'package:appmelmar/providers/admin_provider.dart';
 import 'package:appmelmar/providers/employe_provider.dart';
+import 'package:appmelmar/providers/event_provider.dart';
 import 'package:appmelmar/providers/historique_produit_provider.dart';
 import 'package:appmelmar/providers/model_produit_service_provider.dart';
+import 'package:appmelmar/providers/new_provider.dart';
 import 'package:appmelmar/providers/paiement_provider.dart';
 import 'package:appmelmar/providers/planning_provider.dart';
 import 'package:appmelmar/providers/reservation_provider.dart';
@@ -36,7 +38,16 @@ class DatabaseService {
 
   Future<Database> get database async {
     if (_database != null) return _database!;
-    _database = await _initDatabase();
+    String path = join(await getDatabasesPath(), 'app_database.db');
+    // Vérifie si le fichier existe déjà
+    bool exists = await databaseFactory.databaseExists(path);
+    if (!exists) {
+      _database = await _initDatabase();
+      print("la base de donnees n'existait pas et maintenant elle existe");
+    } else {
+      _database = await openDatabase(path);
+      print("la base de donnees existe deja");
+    }
     return _database!;
   }
 
@@ -48,7 +59,7 @@ class DatabaseService {
       onCreate: (db, version) async {
         // Création des tables
         await db.execute('''
-          CREATE TABLE Utilisateur (
+          CREATE TABLE IF NOT EXISTS Utilisateur (
             id_utilisateur INTEGER PRIMARY KEY,
             nom TEXT,
             prenom TEXT,
@@ -60,7 +71,7 @@ class DatabaseService {
           )
         ''');
         await db.execute('''
-          CREATE TABLE Client (
+          CREATE TABLE IF NOT EXISTS Client (
             id_client INTEGER PRIMARY KEY,
             id_utilisateur INTEGER,
             login TEXT,
@@ -74,7 +85,7 @@ class DatabaseService {
           )
         ''');
         await db.execute('''
-          CREATE TABLE Employe (
+          CREATE TABLE IF NOT EXISTS Employe (
             id_employe INTEGER PRIMARY KEY,
             id_utilisateur INTEGER,
             login TEXT,
@@ -85,8 +96,6 @@ class DatabaseService {
             nom TEXT,
             prenom TEXT,
             sexe TEXT,
-            login TEXT,
-            password TEXT,
             date_naissance TEXT,
             date_creation TEXT,
             FOREIGN KEY (id_utilisateur) REFERENCES Utilisateur(id_utilisateur),
@@ -94,7 +103,7 @@ class DatabaseService {
           )
         ''');
         await db.execute('''
-          CREATE TABLE Admin (
+          CREATE TABLE IF NOT EXISTS Admin (
             id_admin INTEGER PRIMARY KEY,
             id_utilisateur INTEGER,
             login TEXT,
@@ -102,15 +111,13 @@ class DatabaseService {
             nom TEXT,
             prenom TEXT,
             sexe TEXT,
-            login TEXT,
-            password TEXT,
             date_naissance TEXT,
             date_creation TEXT,
             FOREIGN KEY (id_utilisateur) REFERENCES Utilisateur(id_utilisateur)
           )
         ''');
         await db.execute('''
-          CREATE TABLE Abonnement (
+          CREATE TABLE IF NOT EXISTS Abonnement (
             id_abonnement INTEGER PRIMARY KEY,
             id_client INTEGER,
             id_employe INTEGER,
@@ -126,7 +133,7 @@ class DatabaseService {
           )
         ''');
         await db.execute('''
-          CREATE TABLE Seance (
+          CREATE TABLE IF NOT EXISTS Seance (
             id_seance INTEGER PRIMARY KEY,
             id_abonnement INTEGER,
             id_client INTEGER,
@@ -134,14 +141,14 @@ class DatabaseService {
             id_secteur INTEGER,
             date_creation TEXT,
             duree TEXT,
-            FOREIGN KEY (abonnementId) REFERENCES Abonnement(id_abonnement),
+            FOREIGN KEY (id_abonnement) REFERENCES Abonnement(id_abonnement),
             FOREIGN KEY (id_employe) REFERENCES Employe(id_employe),
             FOREIGN KEY (id_client) REFERENCES Client(id_client),
             FOREIGN KEY (id_secteur) REFERENCES Secteur(id_secteur)
           )
         ''');
         await db.execute('''
-          CREATE TABLE Paiement (
+          CREATE TABLE IF NOT EXISTS Paiement (
             id_paiement INTEGER PRIMARY KEY,
             date_paiement TEXT,
             id_client INTEGER,
@@ -156,7 +163,7 @@ class DatabaseService {
           )
         ''');
         await db.execute('''
-          CREATE TABLE Reservation (
+          CREATE TABLE IF NOT EXISTS Reservation (
             id_reservation INTEGER PRIMARY KEY,
             date_creation TEXT,
             id_client INTEGER,
@@ -168,14 +175,15 @@ class DatabaseService {
           )
         ''');
         await db.execute('''
-          CREATE TABLE Secteur (
+          CREATE TABLE IF NOT EXISTS Secteur (
             id_secteur INTEGER PRIMARY KEY,
             libelle TEXT
           )
         ''');
         await db.execute('''
-          CREATE TABLE Model_produit_service (
+          CREATE TABLE IF NOT EXISTS Model_produit_service (
             id_model INTEGER PRIMARY KEY,
+            type TEXT,
             nom_model TEXT,
             champs_model TEXT,
             id_secteur INTEGER,
@@ -185,7 +193,7 @@ class DatabaseService {
           )
         ''');
         await db.execute('''
-          CREATE TABLE Historique_model_produit_service (
+          CREATE TABLE IF NOT EXISTS Historique_model_produit_service (
             id_historique INTEGER PRIMARY KEY AUTOINCREMENT,
             id_model INTEGER NOT NULL,
             type_action TEXT NOT NULL,
@@ -199,7 +207,7 @@ class DatabaseService {
           )
         ''');
         await db.execute('''
-          CREATE TABLE Tache (
+          CREATE TABLE IF NOT EXISTS Tache (
            id_tache INTEGER PRIMARY KEY,
             titre TEXT,
             contenu TEXT,
@@ -211,7 +219,7 @@ class DatabaseService {
           )
         ''');
         await db.execute('''
-          CREATE TABLE Planning (
+          CREATE TABLE IF NOT EXISTS Planning (
             id_planning INTEGER PRIMARY KEY,
             jours_travail TEXT,
             id_admin INTEGER,
@@ -222,7 +230,7 @@ class DatabaseService {
           )
         ''');
         await db.execute('''
-          CREATE TABLE Presence (
+          CREATE TABLE IF NOT EXISTS Presence (
             id_presence INTEGER PRIMARY KEY,
             presence BOOLEAN,
             motif TEXT,
@@ -232,7 +240,7 @@ class DatabaseService {
           )
         ''');
         await db.execute('''
-          CREATE TABLE Salaire_statut (
+          CREATE TABLE IF NOT EXISTS Salaire_statut (
             id_salaire_statut INTEGER PRIMARY KEY,
             montant REAL,
             date_paie TEXT,
@@ -241,6 +249,32 @@ class DatabaseService {
             id_admin INTEGER,
             FOREIGN KEY (id_employe) REFERENCES Employe(id_employe),
             FOREIGN KEY (id_admin) REFERENCES Admin(id_admin)
+          )
+        ''');
+        await db.execute('''
+          CREATE TABLE IF NOT EXISTS NewModel (
+            id INTEGER PRIMARY KEY,
+            name TEXT,
+            description TEXT,
+            created_at TEXT
+          )
+        ''');
+        await db.execute('''
+          CREATE TABLE IF NOT EXISTS EventModel (
+            id INTEGER PRIMARY KEY,
+            title TEXT,
+            details TEXT,
+            event_date TEXT,
+            created_at TEXT
+          )
+        ''');
+        // Table Annonce
+        await db.execute('''
+          CREATE TABLE IF NOT EXISTS Annonce (
+            id_annonce INTEGER PRIMARY KEY AUTOINCREMENT,
+            titre TEXT,
+            description TEXT,
+            date_creation TEXT
           )
         ''');
       },
@@ -654,7 +688,7 @@ class DatabaseService {
     final db = await database;
     await db.insert('Reservation', {
       'id_reservation': reservation.idReservation,
-      'date_reservation': reservation.dateReservation.toIso8601String(),
+      'date_reservation': reservation.dateCreation.toIso8601String(),
       'id_client': null, // Peut être mis à jour via addEnregistrerRelation
       'id_seance': null, // Peut être mis à jour via addLier4Relation
     });
@@ -681,7 +715,7 @@ class DatabaseService {
     await db.update(
       'Reservation',
       {
-        'date_reservation': reservation.dateReservation.toIso8601String(),
+        'date_reservation': reservation.dateCreation.toIso8601String(),
       },
       where: 'id_reservation = ?',
       whereArgs: [reservation.idReservation],
@@ -744,7 +778,9 @@ class DatabaseService {
     final db = await database;
     await db.insert('Model_produit_service', {
       'id_model': modelProduitService.idModel,
+      'type': modelProduitService.type,
       'nom_model': modelProduitService.nomModel,
+      'prix':modelProduitService.prix,
       'champs_model': modelProduitService.champsModel,
       'id_secteur': modelProduitService.idSecteur,
       'image_path':modelProduitService.imagePath,
@@ -765,6 +801,12 @@ class DatabaseService {
   Future<List<ModelProduitServiceModel>> getAllModelProduitServices() async {
     final db = await database;
     List<Map<String,dynamic>> maps = await db.query('Model_produit_service');
+    return maps.map((map) => ModelProduitServiceModel.fromMap(map)).toList();
+  }
+
+  Future<List<ModelProduitServiceModel>> getAllModelProduitServicesBySecteur(int idSecteur) async {
+    final db = await database;
+    List<Map<String,dynamic>> maps = await db.query('Model_produit_service', where: 'id_model = ?', whereArgs: [idSecteur]);
     return maps.map((map) => ModelProduitServiceModel.fromMap(map)).toList();
   }
 
@@ -1182,4 +1224,173 @@ Future<void> addHistoriqueProduit(HistoriquePModel histo, HistoriqueProduitProvi
     }).toList();
   }
   
+  /// Supprime complètement la base de données locale
+  Future<void> deleteDatabaseFile() async {
+    String path = join(await getDatabasesPath(), 'app_database.db');
+    await deleteDatabase(path);
+    _database = null;
+  }
+
+  /// Retourne les ModelProduitServiceModel selon idSecteur et type
+  Future<List<ModelProduitServiceModel>> getModelProduitServicesBySecteurAndType(int idSecteur, String type) async {
+    final db = await database;
+    List<Map<String, dynamic>> maps = await db.query(
+      'Model_produit_service',
+      where: 'id_secteur = ? AND type = ?',
+      whereArgs: [idSecteur, type],
+    );
+    return maps.map((map) => ModelProduitServiceModel.fromMap(map)).toList();
+  }
+
+  /// Retourne la liste des différents types de produits pour un secteur donné
+  Future<List<String>> getTypesBySecteur(int idSecteur) async {
+    final db = await database;
+    List<Map<String, dynamic>> maps = await db.rawQuery(
+      'SELECT DISTINCT type FROM Model_produit_service WHERE id_secteur = ?',
+      [idSecteur],
+    );
+    return maps.map((map) => map['type'] as String).toList();
+  }
+
+  /// Retourne la liste des types uniques à partir d'une liste de ModelProduitServiceModel
+  List<String> getTypesFromModelProduitServiceList(List<ModelProduitServiceModel> produits) {
+    final types = <String>{};
+    for (var produit in produits) {
+      if (produit.type != null) {
+        if (!types.contains(produit.type)) {
+          // Ajoute le type uniquement s'il n'est pas déjà présent
+          types.add(produit.type);
+        }
+      }
+    }
+    return types.toList();
+  }
+
+  /// Retourne une liste de ModelProduitServiceModel filtrée par type
+  List<ModelProduitServiceModel> filterModelProduitServiceByType(List<ModelProduitServiceModel> produits, String type) {
+    //return produits.where((p) => p.type == type).toList();
+    List<ModelProduitServiceModel> list=[];
+    for(var produit in produits)
+    {
+      if(!list.contains(produit) && produit.type==type)
+      {
+        list.add(produit);
+      }
+    }
+    return list;
+  }
+
+  // CRUD pour NEWMODEL
+  Future<void> addNewModel(NewModel newModel, NewModelProvider provider) async {
+    final db = await database;
+    await db.insert('NewModel', newModel.toMap());
+    provider.addNewModel(newModel);
+  }
+
+  Future<NewModel?> getNewModel(int id) async {
+    final db = await database;
+    List<Map<String, dynamic>> maps = await db.query('NewModel', where: 'id = ?', whereArgs: [id]);
+    if (maps.isNotEmpty) {
+      return NewModel.fromMap(maps[0]);
+    }
+    return null;
+  }
+
+  Future<List<NewModel>> getAllNewModels() async {
+    final db = await database;
+    List<Map<String, dynamic>> maps = await db.query('NewModel');
+    return maps.map((map) => NewModel.fromMap(map)).toList();
+  }
+
+  Future<void> updateNewModel(NewModel newModel, NewModelProvider provider) async {
+    final db = await database;
+    await db.update('NewModel', newModel.toMap(), where: 'id = ?', whereArgs: [newModel.id]);
+    provider.change(newModel);
+  }
+
+  Future<void> deleteNewModel(int id, NewModelProvider provider) async {
+    final db = await database;
+    await db.delete('NewModel', where: 'id = ?', whereArgs: [id]);
+    provider.removeNewModel(id);
+  }
+
+  // CRUD pour EVENTMODEL
+  Future<void> addEventModel(EventModel event, EventModelProvider provider) async {
+    final db = await database;
+    await db.insert('EventModel', event.toMap());
+    provider.addEvent(event);
+  }
+
+  Future<EventModel?> getEventModel(int id) async {
+    final db = await database;
+    List<Map<String, dynamic>> maps = await db.query('EventModel', where: 'id = ?', whereArgs: [id]);
+    if (maps.isNotEmpty) {
+      return EventModel.fromMap(maps[0]);
+    }
+    return null;
+  }
+
+  Future<List<EventModel>> getAllEventModels() async {
+    final db = await database;
+    List<Map<String, dynamic>> maps = await db.query('EventModel');
+    return maps.map((map) => EventModel.fromMap(map)).toList();
+  }
+
+  Future<void> updateEventModel(EventModel event, EventModelProvider provider) async {
+    final db = await database;
+    await db.update('EventModel', event.toMap(), where: 'id = ?', whereArgs: [event.id]);
+    provider.change(event);
+  }
+
+  Future<void> deleteEventModel(int id, EventModelProvider provider) async {
+    final db = await database;
+    await db.delete('EventModel', where: 'id = ?', whereArgs: [id]);
+    provider.removeEvent(id);
+  }
+
+  // CRUD pour ANNONCE
+  Future<void> addAnnonce(Map<String, dynamic> annonce, dynamic provider) async {
+    final db = await database;
+    await db.insert('Annonce', annonce);
+    if (provider != null && provider.addAnnonce != null) {
+      provider.addAnnonce(annonce);
+    }
+  }
+
+  Future<Map<String, dynamic>?> getAnnonce(int idAnnonce) async {
+    final db = await database;
+    List<Map<String, dynamic>> maps = await db.query('Annonce', where: 'id_annonce = ?', whereArgs: [idAnnonce]);
+    if (maps.isNotEmpty) {
+      return maps[0];
+    }
+    return null;
+  }
+
+  Future<List<Map<String, dynamic>>> getAllAnnonces() async {
+    final db = await database;
+    List<Map<String, dynamic>> maps = await db.query('Annonce');
+    return maps;
+  }
+
+  Future<void> updateAnnonce(Map<String, dynamic> annonce, dynamic provider) async {
+    final db = await database;
+    await db.update(
+      'Annonce',
+      annonce,
+      where: 'id_annonce = ?',
+      whereArgs: [annonce['id_annonce']],
+    );
+    if (provider != null && provider.change != null) {
+      provider.change(annonce);
+    }
+  }
+
+  Future<void> deleteAnnonce(int idAnnonce, dynamic provider) async {
+    final db = await database;
+    await db.delete('Annonce', where: 'id_annonce = ?', whereArgs: [idAnnonce]);
+    if (provider != null && provider.removeAnnonce != null) {
+      provider.removeAnnonce(idAnnonce);
+    }
+  }
 }
+

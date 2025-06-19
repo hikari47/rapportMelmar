@@ -1,0 +1,7 @@
+#ID DANS LA TABLE SECTEUR
+  # kinesitherqpie =>1
+  # fitness =>2
+  # beaute=>3
+  # immobilier =>4
+  # digicom =>5
+  # kamtal production =>6

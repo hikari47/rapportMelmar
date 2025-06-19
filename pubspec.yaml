@@ -63,7 +63,7 @@ dependencies:
   screenshot: ^3.0.0
   #android_flutter_wifi: ^0.1.3
   flutter_vlc_player: ^7.4.2
-
+  video_thumbnail: ^0.5.6
   # Dépendances principalement pour Web
   file_picker: ^8.1.3
   #qr_code_scanner: ^1.0.1 on ne scan pas quand on utilise la plateforme web

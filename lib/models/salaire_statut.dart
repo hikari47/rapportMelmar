@@ -29,5 +29,17 @@ class SalaireStatutModel {
     );
   }
 
+    Map<String, dynamic> toMap() {
+    return {
+        'idSalaireStatut':this.idSalaireStatut,
+        'id_employe':this.idEmpl,
+        'id_admin':this.idAdmin,
+        'payer':this.payer,
+        'montant':this.montant,
+        'motif':this.motif,
+        'date_creation':this.dateCreation,
+    };
+  }
+
   
 }

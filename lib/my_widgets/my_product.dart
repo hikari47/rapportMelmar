@@ -1,21 +1,30 @@
+import 'package:appmelmar/models/model_produit_service.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'package:appmelmar/my_widgets/product_info.dart';
+import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 
 // Widget principal pour afficher la liste des produits
 class MyProduct extends StatelessWidget {
   final Axis direction;
-  final List<Map<String, dynamic>> products;
+  final double? l;
+  final List<ModelProduitServiceModel> products;
 
   const MyProduct({
     Key? key,
     required this.direction,
+    this.l,
     required this.products,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     List<Widget> productWidgets = products.map((product) {
+      // Détection de l'extension
+      String path = product.imagePath ?? '';
+      String ext = path.split('.').last.toLowerCase();
+      bool isVideo = ['mp4', 'mov', 'avi', 'mkv', 'webm'].contains(ext);
+
       return GestureDetector(
         onTap: () {
           Navigator.of(context).push(
@@ -26,32 +35,44 @@ class MyProduct extends StatelessWidget {
         },
         child: Container(
           margin: const EdgeInsets.all(8),
-          width: 140,
+          width: l==null?200:l,
+          height: 250,
+          color: Colors.blue,
           child: Stack(
-            alignment: Alignment.bottomCenter,
             children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: product['imageUrl'].toString().startsWith('http')
-                    ? Image.network(
-                        product['imageUrl'],
-                        width: 140,
-                        height: 140,
-                        fit: BoxFit.cover,
-                      )
-                    : product['imageUrl'].toString().startsWith('/')
-                        ? Image.file(
-                            File(product['imageUrl']),
-                            width: 140,
-                            height: 140,
-                            fit: BoxFit.cover,
-                          )
-                        : Image.asset(
-                            product['imageUrl'],
-                            width: 140,
-                            height: 140,
-                            fit: BoxFit.cover,
-                          ),
+              Positioned.fill(
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: isVideo
+                      ? VlcPlayer(
+                          controller: VlcPlayerController.file(File(path)),
+                          aspectRatio: 16 / 9,
+                          placeholder: const Center(child: CircularProgressIndicator()),
+                        )
+                      : path.startsWith('http')
+                          ? Image.network(
+                              path,
+                              fit: BoxFit.fill,
+                              errorBuilder: (context, error, stackTrace) => Center(
+                                child: Icon(Icons.broken_image, size: 60, color: Colors.white),
+                              ),
+                            )
+                          : path.startsWith('/')
+                              ? Image.file(
+                                  File(path),
+                                  fit: BoxFit.fill,
+                                  errorBuilder: (context, error, stackTrace) => Center(
+                                    child: Icon(Icons.broken_image, size: 60, color: Colors.red),
+                                  ),
+                                )
+                              : Image.asset(
+                                  path,
+                                  fit: BoxFit.fill,
+                                  errorBuilder: (context, error, stackTrace) => Center(
+                                    child: Icon(Icons.broken_image, size: 60, color: Colors.white),
+                                  ),
+                                ),
+                ),
               ),
               Container(
                 width: double.infinity,
@@ -66,7 +87,7 @@ class MyProduct extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      product['title'] ?? '',
+                      product.nomModel ?? '',
                       style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
@@ -76,7 +97,7 @@ class MyProduct extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      product['price'] != null ? '${product['price']} FCFA' : '',
+                      product.prix != null ? '${product.prix} FCFA' : '',
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 13,
@@ -92,14 +113,18 @@ class MyProduct extends StatelessWidget {
     }).toList();
 
     return direction == Axis.vertical
-        ? Column(
+        ? SingleChildScrollView( 
+          scrollDirection: direction, 
+          child: Column(
             mainAxisSize: MainAxisSize.min,
             children: productWidgets,
-          )
-        : Row(
+          ),) 
+        : SingleChildScrollView( 
+          scrollDirection: direction, 
+          child: Row(
             mainAxisSize: MainAxisSize.min,
             children: productWidgets,
-          );
+          ),);
   }
 }
 

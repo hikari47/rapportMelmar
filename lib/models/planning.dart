@@ -22,6 +22,14 @@ class PlanningModel {
       dateCreation: data['date_creation']
     );
   }
-
+   Map<String, dynamic> toMap() {
+    return {
+        'idPlanning':this.idPlanning,
+        'id_admin':this.idAdmin,
+        'id_employe':this.idEmpl,
+        'date_creation':this.dateCreation,
+        'joursTravail':this.joursTravail
+    };
+  }
 
 }

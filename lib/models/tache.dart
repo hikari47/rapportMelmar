@@ -29,5 +29,17 @@ class TacheModel {
     );
   }
 
+  Map<String, dynamic> toMap() {
+    return {
+        'idTache':this.idTache,
+        'titre':this.titre,
+        'id_utilisateur':this.idUser,
+        'contenu':this.contenu,
+        'priorite':this.Priorite,
+        'effectuer':this.effectuer,
+        'date_creation':this.dateCreation
+    };
+  }
+
  
 }

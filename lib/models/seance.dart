@@ -32,4 +32,81 @@ class SeanceModel {
     );
   }
 
+  Map<String, dynamic> toMap() {
+    return {
+        'id_seance':this.idSeance,
+        'id_client':this.idCli,
+        'id_employe':this.idEmpl,
+        'id_abonnement':this.idAbonnement,
+        'id_secteur':this.idSecteur,
+        'duree':this.duree,
+        'montantT':this.montantT,
+        'date_creation':this.dateCreation,
+    };
+  }
+
+}
+
+class NewModel {
+  final int id;
+  final String image;
+  final String url;
+
+  NewModel({
+    required this.id,
+    required this.image,
+    required this.url,
+  });
+
+  factory NewModel.fromMap(Map<String, dynamic> data) {
+    return NewModel(
+      id: data['id'],
+      image: data['image'],
+      url: data['url'],
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': this.id,
+      'image': this.image,
+      'url': this.url,
+    };
+  }
+}
+
+class EventModel {
+  final int id;
+  final String image;
+  final String titre;
+  final String description;
+  final String url;
+
+  EventModel({
+    required this.id,
+    required this.image,
+    required this.titre,
+    required this.description,
+    required this.url,
+  });
+
+  factory EventModel.fromMap(Map<String, dynamic> data) {
+    return EventModel(
+      id: data['id'],
+      image: data['image'],
+      titre: data['titre'],
+      description: data['description'],
+      url: data['url'],
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': this.id,
+      'image': this.image,
+      'titre': this.titre,
+      'description': this.description,
+      'url': this.url,
+    };
+  }
 }

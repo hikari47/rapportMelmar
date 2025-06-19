@@ -22,4 +22,14 @@ class PresenceModel {
     );
   }
 
+   Map<String, dynamic> toMap() {
+    return {
+        'idPresence':this.idPresence,
+        'id_employe':this.idEmpl,
+        'presence':this.presence,
+        'motif':this.motif,
+        'date_creation':this.dateCreation,
+    };
+  }
+
 }

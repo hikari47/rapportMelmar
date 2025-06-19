@@ -1,5 +1,12 @@
 
+import 'package:appmelmar/providers/abonnement_provider.dart';
 import 'package:appmelmar/providers/client_provider.dart';
+import 'package:appmelmar/providers/dynamic_provider.dart';
+import 'package:appmelmar/providers/model_produit_service_provider.dart';
+import 'package:appmelmar/providers/paiement_provider.dart';
+import 'package:appmelmar/providers/reservation_provider.dart';
+import 'package:appmelmar/providers/seance_provider.dart';
+import 'package:appmelmar/providers/secteur_provider.dart';
 import 'package:appmelmar/providers/user_provider.dart';
 import 'package:appmelmar/screens/accueil.dart';
 import 'package:appmelmar/screens/beauty.dart';
@@ -31,12 +38,19 @@ void main() async {
   print('initialisation reussi');
   await initializeDateFormatting('fr_FR', null);
   runApp(
-    MultiProvider(providers: [
-    ChangeNotifierProvider(create: (_) => UserProvider()),
-    ChangeNotifierProvider(create: (_) => ClientProvider()),
-    ],
-    child: const MyApp(),)
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => DynamicProvider()),
+        ChangeNotifierProvider(create: (_) => ModelProduitServiceProvider()),
+        ChangeNotifierProvider(create: (_) => PaiementProvider()),
+        ChangeNotifierProvider(create: (_) => AbonnementProvider()),
+        ChangeNotifierProvider(create: (_) => ReservationProvider()),
+        ChangeNotifierProvider(create: (_) => SeanceProvider()),
+        ChangeNotifierProvider(create: (_) => SecteurProvider()),
+      ],
+      child:const MyApp())
   );
+ 
  // runApp(MyApp());
 }
 
@@ -44,14 +58,14 @@ Map<String, WidgetBuilder> getAppRoutes() {
   return {
     //'/': (context) => AccueilPage(),
     //'/': (context) =>  Intro(),
-    '/':(context)=>PageTest(),
+    //'/':(context)=>PageTest(),
     '/inscriptionClient': (context) =>  InscriptionClientPage(),
     '/inscriptionEmploye': (context) =>  InscriptionEmployePage(),
     '/login': (context) =>  LoginPage(),
     '/presence': (context) =>  PresencePage(),
     '/espace_personnel': (context) => EspacePersonnel(),
     '/first': (context) =>  FirstPage(),
-    '/accueil': (context) =>  AccueilPage(),
+    '/': (context) =>  AccueilPage(),
     '/immobilier': (context) =>  Immo(),
     '/details_immo': (context) =>  DetailsImmo(),
     '/beauty': (context) =>  BeautyPage(),

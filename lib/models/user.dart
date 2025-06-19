@@ -33,6 +33,18 @@ class UserModel {
       dateCreation: DateTime.parse(data['date_creation']),
     );
   }
+  Map<String, dynamic> toMap() {
+    return {
+        'id_utilisateur':this.idUser,
+        'nom':this.nom,
+        'prenom':this.prenom,
+        'sexe':this.sexe,
+        'modifications_utilisateur':this.updateInfoUser,
+        'image_path':this.imagePath,
+        'date_naissance':this.dateNaissance,
+        'date_creation':this.dateCreation
+    };
+  }
 
 }
 
@@ -78,6 +90,21 @@ class ClientModel extends UserModel {
       dateNaissance: DateTime.parse(data['date_naissance']),
       dateCreation: DateTime.parse(data['date_creation']),
     );
+  }
+  Map<String, dynamic> toMap() {
+    return {
+        'id_client':this.idCli,
+        'login':this.login,
+        'password':this.password,
+        'id_utilisateur':this.idUser,
+        'nom':this.nom,
+        'prenom':this.prenom,
+        'sexe':this.sexe,
+        'modifications_utilisateur':this.updateInfoUser,
+        'image_path':this.imagePath,
+        'date_naissance':this.dateNaissance,
+        'date_creation':this.dateCreation
+    };
   }
 
 }
@@ -128,7 +155,22 @@ class EmployeModel extends UserModel {
       dateCreation: DateTime.parse(data['date_creation']),
     );
   }
-
+   Map<String, dynamic> toMap() {
+    return {
+        'id_client':this.idEmpl,
+        'login':this.login,
+        'password':this.password,
+        'prise_service':this.priseService,
+        'id_utilisateur':this.idUser,
+        'nom':this.nom,
+        'prenom':this.prenom,
+        'sexe':this.sexe,
+        'modifications_utilisateur':this.updateInfoUser,
+        'image_path':this.imagePath,
+        'date_naissance':this.dateNaissance,
+        'date_creation':this.dateCreation
+    };
+  }
 
 }
 
@@ -174,6 +216,21 @@ class AdminModel extends UserModel {
       dateNaissance: DateTime.parse(data['date_naissance']),
       dateCreation: DateTime.parse(data['date_creation']),
     );
+  }
+   Map<String, dynamic> toMap() {
+    return {
+        'id_client':this.idAdmin,
+        'login':this.login,
+        'password':this.password,
+        'id_utilisateur':this.idUser,
+        'nom':this.nom,
+        'prenom':this.prenom,
+        'sexe':this.sexe,
+        'modifications_utilisateur':this.updateInfoUser,
+        'image_path':this.imagePath,
+        'date_naissance':this.dateNaissance,
+        'date_creation':this.dateCreation
+    };
   }
 
  

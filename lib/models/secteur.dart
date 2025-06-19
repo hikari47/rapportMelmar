@@ -14,5 +14,12 @@ class SecteurModel {
     );
   }
 
+  Map<String, dynamic> toMap() {
+    return {
+        'idSecteur':this.idSecteur,
+        'libelle':this.libelle
+    };
+  }
+
  
 }

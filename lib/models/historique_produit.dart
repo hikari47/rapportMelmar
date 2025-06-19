@@ -33,4 +33,16 @@ class HistoriquePModel {
     commentaire: data['commentaire'],
     );
   }
+
+   Map<String, dynamic> toMap() {
+    return {
+        'id_historique':this.idHistorique,
+        'id_model':this.idModel,
+        'id_utilisateur':this.idUser,
+        'type_action':this.typeAction,
+        'quantite':this.quantite,
+        'montantU':this.montantU,
+        'montantT':this.montantT
+    };
+  }
 }

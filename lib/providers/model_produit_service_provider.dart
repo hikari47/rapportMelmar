@@ -12,7 +12,10 @@ class ModelProduitServiceProvider with ChangeNotifier {
     _modelProduitServices.add(modelProduitService);
     notifyListeners();
   }
-
+  void addList(List<ModelProduitServiceModel> list){
+    _modelProduitServices.addAll(list);
+    notifyListeners();
+  }
   void setModelProduitService(ModelProduitServiceModel modelProduitService) {
     _modelProduitService = modelProduitService;
     notifyListeners();

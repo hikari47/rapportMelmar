@@ -22,4 +22,14 @@ class PaiementModel {
       montant: (data['montant'] as num).toDouble(),
     );
   }
+
+    Map<String, dynamic> toMap() {
+    return {
+        'id_paiement':this.idPaiement,
+        'id_client':this.idCli,
+        'id_employe':this.idEmpl,
+        'date_creation':this.dateCreation,
+        'montant':this.montant
+    };
+  }
 }

@@ -6,8 +6,8 @@ import 'package:appmelmar/my_widgets/product_service_achat_form.dart';
 import 'package:appmelmar/my_widgets/product_service_form_reservation.dart';
 import 'package:appmelmar/screens/accueil.dart';
 import 'package:flutter/material.dart';
-import 'package:appmelmar/Widgets/video_gallery_vlc.dart';
-import 'package:appmelmar/Widgets/video_gallery_vlc1.dart';
+//import 'package:appmelmar/Widgets/video_gallery_vlc.dart';
+import 'package:appmelmar/widgets/lecture_vignette.dart';
 import 'package:appmelmar/screens/test_marquer_presence.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -183,7 +183,7 @@ class _PageTestState extends State<PageTest>{
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => VideoGalleryVlcPlayer1(),
+                  builder: (context) => VideoSelectorScreen(),
                 ),
               );
             },
